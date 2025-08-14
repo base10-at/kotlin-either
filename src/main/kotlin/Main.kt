@@ -1,6 +1,11 @@
 package at.base10
 
 import at.base10.either.Either
+import at.base10.either.bind
+import at.base10.either.bindEither
+import at.base10.either.map
+import at.base10.either.mapEither
+import at.base10.either.mapFailure
 
 fun Either<Int, String>.doSomthing(): Either<Int, String> {
     return this.bindEither(
@@ -23,9 +28,9 @@ fun main() {
 //    val x: Either<Int, String> = Either.failure("hello").doSomthing()
     val x = Either.success(1)
     val y = x.doSomthing()
-    val name = when (x) {
-        is Either.Failure -> x.failure
-        is Either.Success -> x.success
-    }
+    val name = y.either(
+        { x -> x },
+        { x -> x }
+    )
     println(name)
 }
