@@ -1,8 +1,8 @@
 package at.base10.either.collect
 
 import at.base10.either.Either
-import at.base10.either.failureOrNull
-import at.base10.either.orNull
+import at.base10.either.value.failureOrNull
+import at.base10.either.value.orNull
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
@@ -10,6 +10,26 @@ import strikt.assertions.isEqualTo
 
 
 class CollectIterableFn {
+
+    @Test
+    fun `should be success when empty`() {
+        val list = emptyList<Either<*, *>>()
+
+        val actual = list.asIterable().collect.applicative()
+        expectThat(actual.orNull()).isA<Iterable<*>>()
+        expectThat(actual) isEqualTo Either.success(emptyList())
+    }
+
+    @Test
+    fun `should be success when init with empty`() {
+        val list = listOf(Either.success(1), Either.success(2), Either.success(3))
+
+        val actual = IterableCollector(list).applicative()
+        expectThat(actual.orNull()).isA<Iterable<*>>()
+        expectThat(actual) isEqualTo Either.success(listOf(1, 2, 3))
+    }
+
+
     @Test
     fun `should collect applicative when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))

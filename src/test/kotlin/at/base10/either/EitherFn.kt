@@ -9,25 +9,25 @@ class EitherFn {
 
     @Test
     fun `either should return success value`() {
-        val subject = Either.success("success")
+        val subject: Either<String, String> = Either.success("success")
 
         val actual = subject.either(
-            onSuccess = { it },
-            onFailure = { "FAILURE" },
+            onSuccess = { "$it SUCCESS" },
+            onFailure = { "$it FAILURE" },
         )
-        expectThat(actual) isEqualTo "success"
+        expectThat(actual) isEqualTo "success SUCCESS"
     }
 
     @Test
     fun `either should return failure value`() {
 
-        val subject = Either.failure("failure")
+        val subject: Either<String, String> = Either.failure("failure")
 
         val actual = subject.either(
-            onSuccess = { "SUCCESS" },
-            onFailure = { it },
+            onSuccess = { "$it SUCCESS" },
+            onFailure = { "$it FAILURE" },
         )
-        expectThat(actual) isEqualTo "failure"
+        expectThat(actual) isEqualTo "failure FAILURE"
 
     }
 }

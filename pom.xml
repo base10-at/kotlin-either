@@ -12,6 +12,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <pitest.version>1.17.0</pitest.version>
+        <junit-jupiter.version>5.10.0</junit-jupiter.version>
+        <pitest-junit5-plugin.version>1.2.2</pitest-junit5-plugin.version>
     </properties>
 
     <repositories>
@@ -20,6 +23,32 @@
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.strikt</groupId>
+            <artifactId>strikt-core</artifactId>
+            <version>0.34.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
@@ -62,33 +91,72 @@
                     <mainClass>MainKt</mainClass>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest.version}</version>
+                <configuration>
+                    <targetClasses>
+                        <param>at.base10.either.*</param>
+                        <param>at.base10.either.bind.*</param>
+                        <param>at.base10.either.map.*</param>
+                        <param>at.base10.either.collect.*</param>
+                        <param>at.base10.either.traverse.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>at.base10.either.*</param>
+                        <param>at.base10.either.bind.*</param>
+                        <param>at.base10.either.map.*</param>
+                        <param>at.base10.either.collect.*</param>
+                        <param>at.base10.either.traverse.*</param>
+                    </targetTests>
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                        <mutator>ALL</mutator>
+                        <mutator>EXPERIMENTAL_MEMBER_VARIABLE</mutator>
+                    </mutators>
+                    <excludedMethods>
+                        <method>at.base10.either.Either.failure</method>
+
+                    </excludedMethods>
+
+                    <excludedClasses>
+                        <param>at.base10.either.value.SuccessKt$success$2</param>
+                        <param>at.base10.either.value.FailureKt$failure$1</param>
+                    </excludedClasses>
+                    <avoidCallsTo>
+                        <avoidCallsTo>kotlin.jvm.internal</avoidCallsTo>
+                        <avoidCallsTo>kotlinx.coroutines</avoidCallsTo>
+                        <avoidCallsTo>kotlin.NoWhenBranchMatchedException</avoidCallsTo>
+                    </avoidCallsTo>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>run-pitest</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                        <configuration>
+                            <mutators>
+                                <mutator>ALL</mutator>
+                            </mutators>
+                            <failWhenNoMutations>true</failWhenNoMutations>
+                            <maxSurviving>0</maxSurviving>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${pitest-junit5-plugin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit5</artifactId>
-            <version>2.2.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.strikt</groupId>
-            <artifactId>strikt-core</artifactId>
-            <version>0.34.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>2.2.0</version>
-        </dependency>
-    </dependencies>
 
 </project>

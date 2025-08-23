@@ -1,10 +1,10 @@
 package at.base10.either.traverse
 
 import at.base10.either.Either
-import at.base10.either.failureOrNull
 import at.base10.either.map.map
 import at.base10.either.map.mapFailure
-import at.base10.either.orNull
+import at.base10.either.value.failureOrNull
+import at.base10.either.value.orNull
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
@@ -12,6 +12,17 @@ import strikt.assertions.isEqualTo
 
 
 class TraverseIteratorFn {
+
+    @Test
+    fun `should be success when empty`() {
+        val list = emptyList<Any>()
+
+        val actual = list.iterator().traverse.applicative { Either.success(it) }
+
+        expectThat(actual.orNull()).isA<Iterator<*>>()
+        expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(emptyList())
+    }
+
     @Test
     fun `should traverse applicative when all when success`() {
         val list = listOf(1, 2, 3)

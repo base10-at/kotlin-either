@@ -1,10 +1,10 @@
 package at.base10.either.collect
 
 import at.base10.either.Either
-import at.base10.either.failureOrNull
 import at.base10.either.map.map
 import at.base10.either.map.mapFailure
-import at.base10.either.orNull
+import at.base10.either.value.failureOrNull
+import at.base10.either.value.orNull
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
@@ -12,6 +12,15 @@ import strikt.assertions.isEqualTo
 
 
 class CollectSequenceFn {
+    @Test
+    fun `should be success when empty`() {
+        val list = emptyList<Either<*, *>>()
+        val actual = list.asSequence().collect.applicative()
+
+        expectThat(actual.orNull()).isA<Sequence<*>>()
+        expectThat(actual.map { it.toList() }) isEqualTo Either.success(emptyList())
+    }
+
     @Test
     fun `should collect applicative when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))
