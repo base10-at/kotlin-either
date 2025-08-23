@@ -1,11 +1,11 @@
 package at.base10
 
 import at.base10.either.Either
-import at.base10.either.bind
-import at.base10.either.bindEither
-import at.base10.either.map
-import at.base10.either.mapEither
-import at.base10.either.mapFailure
+import at.base10.either.bind.bind
+import at.base10.either.bind.bindEither
+import at.base10.either.map.map
+import at.base10.either.map.mapEither
+import at.base10.either.map.mapFailure
 
 fun Either<Int, String>.doSomthing(): Either<Int, String> {
     return this.bindEither(
