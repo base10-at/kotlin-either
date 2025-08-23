@@ -1,39 +1,17 @@
 package at.base10.either.traverse
 
 import at.base10.either.Either
+import at.base10.either.collect.collectApplicative
+import at.base10.either.collect.collectMonadic
 
-val <V> Iterable<V>.traverse: IterableTraverser<V> get() = IterableTraverser(this)
+fun <V, S, F> Iterable<V>.traverseApplicative(mapping: (V) -> Either<S, F>) = this
+    .asSequence()
+    .map(mapping)
+    .asIterable()
+    .collectApplicative()
 
-class IterableTraverser<V>(private val iterable: Iterable<V>) {
-
-    fun <S, F> applicative(mapping: (V) -> Either<S, F>): Either<Iterable<S>, Iterable<F>> {
-        val successList = mutableListOf<S>()
-        val failureList = mutableListOf<F>()
-
-        for (element in iterable) {
-            when (val mapped = mapping(element)) {
-                is Either.Failure -> failureList.add(mapped.value)
-                else -> successList.add((mapped as Either.Success<S, *>).value)
-            }
-        }
-        return when {
-            failureList.isNotEmpty() -> Either.failure(failureList.toList())
-            else -> Either.success(successList.toList())
-
-        }
-    }
-
-    fun <S, F> monadic(mapping: (V) -> Either<S, F>): Either<Iterable<S>, F> {
-        val successList = mutableListOf<S>()
-        for (element in iterable) {
-
-            when (val mapped = mapping(element)) {
-                is Either.Failure -> return Either.failure(mapped.value)
-                else -> successList.add((mapped as Either.Success<S, *>).value)
-            }
-        }
-        return Either.success(successList)
-    }
-
-
-}
+fun <V, S, F> Iterable<V>.traverseMonadic(mapping: (V) -> Either<S, F>) = this
+    .asSequence()
+    .map(mapping)
+    .asIterable()
+    .collectMonadic()

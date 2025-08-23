@@ -16,7 +16,7 @@ class CollectIteratorFn {
     fun `should be success when empty`() {
         val list = emptyList<Either<*, *>>()
 
-        val actual = list.iterator().collect.applicative()
+        val actual = list.iterator().collectApplicative()
 
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(emptyList())
@@ -26,7 +26,7 @@ class CollectIteratorFn {
     fun `should collect applicative when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))
 
-        val actual = list.iterator().collect.applicative()
+        val actual = list.iterator().collectApplicative()
 
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(listOf(1, 2, 3))
@@ -35,7 +35,7 @@ class CollectIteratorFn {
     @Test
     fun `should collect applicative when some are failure when success`() {
         val list = listOf(Either.success("1"), Either.failure(2), Either.failure(3))
-        val actual = list.iterator().collect.applicative()
+        val actual = list.iterator().collectApplicative()
         expectThat(actual.failureOrNull()).isA<Iterator<*>>()
         expectThat(actual.mapFailure { it.asSequence().toList() }) isEqualTo Either.failure(listOf(2, 3))
     }
@@ -43,7 +43,7 @@ class CollectIteratorFn {
     @Test
     fun `should collect monadic when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))
-        val actual = list.iterator().collect.monadic()
+        val actual = list.iterator().collectMonadic()
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(listOf(1, 2, 3))
     }
@@ -51,7 +51,7 @@ class CollectIteratorFn {
     @Test
     fun `should collect monadic when some are failure when success`() {
         val list = listOf(Either.success("1"), Either.failure(2), Either.failure(3))
-        val actual = list.iterator().collect.monadic()
+        val actual = list.iterator().collectMonadic()
         expectThat(actual.failureOrNull()).isA<Int>()
         expectThat(actual.failureOrNull()).not().isA<Iterator<*>>()
         expectThat(actual) isEqualTo Either.failure(2)

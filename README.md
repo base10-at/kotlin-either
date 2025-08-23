@@ -81,19 +81,22 @@ Supports `List`, `Iterable`, `Sequence`, and `Iterator`:
 
 ```kotlin
 val list = listOf(1, 2, 3)
-val traversed = list.traverse.applicative { Either.success(it + 1) } // Either.success(listOf(2, 3, 4))
+val traversed = list.traverseApplicative { Either.success(it + 1) } // Either.success(listOf(2, 3, 4))
 ```
 
-* `applicative()` – collects all successes or all failures.
+* `applicative()` – traverses all successes or all failures.
 * `monadic()` – stops at the first failure.
 
 ### Collecting Multiple `Either`s
 
 ```kotlin
 val eithers = listOf(Either.success(1), Either.failure(2))
-val collected = eithers.collect.applicative() // Either.failure(listOf(2))
+val collected = eithers.collectApplicative() // Either.failure(listOf(2))
 ```
 
+* `applicative()` – collects all successes or all failures.
+* `monadic()` – stops at the first failure.
+* 
 ---
 
 ## Usage

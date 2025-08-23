@@ -14,7 +14,7 @@ class CollectListFn {
     fun `should be success when empty`() {
         val list = emptyList<Either<*, *>>()
 
-        val actual = list.collect.applicative()
+        val actual = list.collectApplicative()
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.success(emptyList())
@@ -25,7 +25,7 @@ class CollectListFn {
     fun `should collect applicative when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))
 
-        val actual = list.collect.applicative()
+        val actual = list.collectApplicative()
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.success(listOf(1, 2, 3))
@@ -36,7 +36,7 @@ class CollectListFn {
     fun `should collect applicative when some are failure when success`() {
         val list = listOf(Either.success("1"), Either.failure(2), Either.failure(3))
 
-        val actual = list.collect.applicative()
+        val actual = list.collectApplicative()
 
         expectThat(actual.failureOrNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.failure(listOf(2, 3))
@@ -47,7 +47,7 @@ class CollectListFn {
     fun `should collect monadic when all when success`() {
         val list = listOf(Either.success(1), Either.success(2), Either.success(3))
 
-        val actual = list.collect.monadic()
+        val actual = list.collectMonadic()
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.success(listOf(1, 2, 3))
@@ -58,7 +58,7 @@ class CollectListFn {
     fun `should collect monadic when some are failure when success`() {
         val list = listOf(Either.success("1"), Either.failure(2), Either.failure(3))
 
-        val actual = list.collect.monadic()
+        val actual = list.collectMonadic()
 
         expectThat(actual.failureOrNull()).not().isA<List<*>>()
         expectThat(actual.failureOrNull()).isA<Int>()

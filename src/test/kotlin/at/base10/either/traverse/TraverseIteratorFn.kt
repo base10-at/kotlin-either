@@ -17,7 +17,7 @@ class TraverseIteratorFn {
     fun `should be success when empty`() {
         val list = emptyList<Any>()
 
-        val actual = list.iterator().traverse.applicative { Either.success(it) }
+        val actual = list.iterator().traverseApplicative { Either.success(it) }
 
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(emptyList())
@@ -27,7 +27,7 @@ class TraverseIteratorFn {
     fun `should traverse applicative when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.iterator().traverse.applicative { Either.success(it + 1) }
+        val actual = list.iterator().traverseApplicative { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(listOf(2, 3, 4))
@@ -43,7 +43,7 @@ class TraverseIteratorFn {
             )
         }
 
-        val actual = list.iterator().traverse.applicative(mapping)
+        val actual = list.iterator().traverseApplicative(mapping)
 
         expectThat(actual.failureOrNull()).isA<Iterator<*>>()
         expectThat(actual.mapFailure { it.asSequence().toList() }) isEqualTo Either.failure(listOf(2, 3).toList())
@@ -54,7 +54,7 @@ class TraverseIteratorFn {
     fun `should traverse monadic when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.iterator().traverse.monadic { Either.success(it + 1) }
+        val actual = list.iterator().traverseMonadic { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<Iterator<*>>()
         expectThat(actual.map { it.asSequence().toList() }) isEqualTo Either.success(listOf(2, 3, 4))
@@ -70,7 +70,7 @@ class TraverseIteratorFn {
             )
         }
 
-        val actual = list.iterator().traverse.monadic(mapping)
+        val actual = list.iterator().traverseMonadic(mapping)
 
         expectThat(actual.failureOrNull()).not().isA<Iterator<*>>()
         expectThat(actual.failureOrNull()).isA<Int>()

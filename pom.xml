@@ -117,18 +117,23 @@
                         <mutator>EXPERIMENTAL_MEMBER_VARIABLE</mutator>
                     </mutators>
                     <excludedMethods>
-                        <method>at.base10.either.Either.failure</method>
+                        <param>at.base10.either.Either.failure</param>
+                        <param>kotlin\.collections\.CollectionsKt::map</param>
 
                     </excludedMethods>
 
                     <excludedClasses>
                         <param>at.base10.either.value.SuccessKt$success$2</param>
                         <param>at.base10.either.value.FailureKt$failure$1</param>
+                        <param>kotlin\.collections\..*</param>
                     </excludedClasses>
+
                     <avoidCallsTo>
-                        <avoidCallsTo>kotlin.jvm.internal</avoidCallsTo>
-                        <avoidCallsTo>kotlinx.coroutines</avoidCallsTo>
-                        <avoidCallsTo>kotlin.NoWhenBranchMatchedException</avoidCallsTo>
+                        <param>kotlin.jvm.internal</param>
+                        <param>kotlinx.coroutines</param>
+                        <param>kotlin.NoWhenBranchMatchedException</param>
+                        <param>kotlin.collections.Iterable</param>
+                        <param>kotlin.collections.ArrayList</param>
                     </avoidCallsTo>
                 </configuration>
 

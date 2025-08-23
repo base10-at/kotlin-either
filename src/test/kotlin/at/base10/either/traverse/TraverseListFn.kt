@@ -15,7 +15,7 @@ class TraverseListFn {
     fun `should be success when empty`() {
         val list = emptyList<Any>()
 
-        val actual = list.traverse.applicative { Either.success(it) }
+        val actual = list.traverseApplicative { Either.success(it) }
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual.map { it }) isEqualTo Either.success(emptyList())
@@ -25,7 +25,7 @@ class TraverseListFn {
     fun `should traverse applicative when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.traverse.applicative { Either.success(it + 1) }
+        val actual = list.traverseApplicative { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.success(listOf(2, 3, 4))
@@ -40,7 +40,7 @@ class TraverseListFn {
             )
         }
 
-        val actual = list.traverse.applicative(mapping)
+        val actual = list.traverseApplicative(mapping)
 
         expectThat(actual.failureOrNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.failure(listOf(2, 3))
@@ -50,7 +50,7 @@ class TraverseListFn {
     fun `should traverse monadic when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.traverse.monadic { Either.success(it + 1) }
+        val actual = list.traverseMonadic { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<List<*>>()
         expectThat(actual) isEqualTo Either.success(listOf(2, 3, 4))
@@ -65,7 +65,7 @@ class TraverseListFn {
             )
         }
 
-        val actual = list.traverse.monadic(mapping)
+        val actual = list.traverseMonadic(mapping)
 
         expectThat(actual.failureOrNull()).not().isA<List<*>>()
         expectThat(actual.failureOrNull()).isA<Int>()

@@ -16,7 +16,7 @@ class TraverseSequenceFn {
     fun `should be success when empty`() {
         val list = emptyList<Any>()
 
-        val actual = list.asSequence().traverse.applicative { Either.success(it) }
+        val actual = list.asSequence().traverseApplicative { Either.success(it) }
 
         expectThat(actual.orNull()).isA<Sequence<*>>()
         expectThat(actual.map { it.toList() }) isEqualTo Either.success(emptyList())
@@ -26,7 +26,7 @@ class TraverseSequenceFn {
     fun `should traverse applicative when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.asSequence().traverse.applicative { Either.success(it + 1) }
+        val actual = list.asSequence().traverseApplicative { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<Sequence<*>>()
         expectThat(actual.map { it.toList() }) isEqualTo Either.success(listOf(2, 3, 4))
@@ -41,7 +41,7 @@ class TraverseSequenceFn {
             )
         }
 
-        val actual = list.asSequence().traverse.applicative(mapping)
+        val actual = list.asSequence().traverseApplicative(mapping)
 
         expectThat(actual.failureOrNull()).isA<Sequence<*>>()
         expectThat(actual.mapFailure { it.toList() }) isEqualTo Either.failure(listOf(2, 3))
@@ -51,7 +51,7 @@ class TraverseSequenceFn {
     fun `should traverse monadic when all when success`() {
         val list = listOf(1, 2, 3)
 
-        val actual = list.asSequence().traverse.monadic { Either.success(it + 1) }
+        val actual = list.asSequence().traverseMonadic { Either.success(it + 1) }
 
         expectThat(actual.orNull()).isA<Sequence<*>>()
         expectThat(actual.map { it.toList() }) isEqualTo Either.success(listOf(2, 3, 4))
@@ -66,7 +66,7 @@ class TraverseSequenceFn {
             )
         }
 
-        val actual = list.asSequence().traverse.monadic(mapping)
+        val actual = list.asSequence().traverseMonadic(mapping)
 
         expectThat(actual.failureOrNull()).not().isA<Sequence<*>>()
         expectThat(actual.failureOrNull()).isA<Int>()
