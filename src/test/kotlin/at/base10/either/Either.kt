@@ -19,6 +19,8 @@ class EitherTest {
         expectThat(success(1)) isNotEqualTo success(2)
         expectThat(failure(2)) isNotEqualTo failure(1)
         expectThat(success(1).hashCode()) isNotEqualTo failure(1).hashCode()
+        expectThat(failure(null).hashCode()) isEqualTo 0
+        expectThat(success(null).hashCode()) isNotEqualTo failure(null).hashCode()
         expectThat(success(1) as Either<*, *>) isNotEqualTo failure(1)
         expectThat(success(1) as Either<*, *>) isNotEqualTo success(2)
         expectThat(failure(2) as Either<*, *>) isNotEqualTo success(2)
