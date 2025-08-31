@@ -26,8 +26,8 @@ This library provides utility functions for:
 ### Creating `Either` Values
 
 ```kotlin
-val success: Either<Nothing, Int> = Either.success(42)
-val failure: Either<Int, Nothing> = Either.failure(1)
+val success: Either<Nothing, Int> = success(42)
+val failure: Either<Int, Nothing> = failure(1)
 ````
 
 ### Accessors
@@ -42,28 +42,28 @@ val isFailure = failure.isFailure     // true
 ### Mapping Values
 
 ```kotlin
-val mapped = success.map { it + 1 }       // Either.success(43)
-val failedMapped = failure.mapFailure { it + 1 } // Either.failure(2)
+val mapped = success.map { it + 1 }       // success(43)
+val failedMapped = failure.mapFailure { it + 1 } // failure(2)
 ```
 
 ### Binding (FlatMapping)
 
 ```kotlin
-val result = success.bind { Either.success(it + 1) }  // Either.success(43)
-val failResult = failure.bindFailure { Either.success("Recovered") } // Either.success("Recovered")
+val result = success.bind { success(it + 1) }  // success(43)
+val failResult = failure.bindFailure { success("Recovered") } // success("Recovered")
 ```
 
 ### Recovering from Failures
 
 ```kotlin
-val recovered = failure.recover { it * 2 } // Either.success(2)
+val recovered = failure.recover { it * 2 } // success(2)
 ```
 
 ### Swapping
 
 ```kotlin
-val swapped = success.swap()  // Either.failure(42)
-val swappedFail = failure.swap() // Either.success(1)
+val swapped = success.swap()  // failure(42)
+val swappedFail = failure.swap() // success(1)
 ```
 
 ### Either Operations
@@ -81,7 +81,7 @@ Supports `List`, `Iterable`, `Sequence`, and `Iterator`:
 
 ```kotlin
 val list = listOf(1, 2, 3)
-val traversed = list.traverseApplicative { Either.success(it + 1) } // Either.success(listOf(2, 3, 4))
+val traversed = list.traverseApplicative { success(it + 1) } // success(listOf(2, 3, 4))
 ```
 
 * `applicative()` – traverses all successes or all failures.
@@ -90,8 +90,8 @@ val traversed = list.traverseApplicative { Either.success(it + 1) } // Either.su
 ### Collecting Multiple `Either`s
 
 ```kotlin
-val eithers = listOf(Either.success(1), Either.failure(2))
-val collected = eithers.collectApplicative() // Either.failure(listOf(2))
+val eithers = listOf(success(1), failure(2))
+val collected = eithers.collectApplicative() // failure(listOf(2))
 ```
 
 * `applicative()` – collects all successes or all failures.

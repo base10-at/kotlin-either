@@ -10,15 +10,18 @@ class EitherTest {
 
     @Test
     fun `should be equal`() {
-        expectThat(Either.success(1)) isEqualTo Either.success(1)
-        expectThat(Either.failure(2)) isEqualTo Either.failure(2)
+        expectThat(success(1)) isEqualTo success(1)
+        expectThat(failure(2)) isEqualTo failure(2)
     }
 
     @Test
     fun `should not be equal`() {
-        expectThat(Either.success(1)) isNotEqualTo Either.success(2)
-        expectThat(Either.failure(2)) isNotEqualTo Either.failure(1)
-        expectThat(Either.success(1) as Either<*, *>) isNotEqualTo Either.failure(1)
-        expectThat(Either.failure(2) as Either<*, *>) isNotEqualTo Either.success(2)
+        expectThat(success(1)) isNotEqualTo success(2)
+        expectThat(failure(2)) isNotEqualTo failure(1)
+        expectThat(success(1).hashCode()) isNotEqualTo failure(1).hashCode()
+        expectThat(success(1) as Either<*, *>) isNotEqualTo failure(1)
+        expectThat(success(1) as Either<*, *>) isNotEqualTo success(2)
+        expectThat(failure(2) as Either<*, *>) isNotEqualTo success(2)
+        expectThat(failure(1) as Either<*, *>) isNotEqualTo failure(2)
     }
 }
